@@ -5,4 +5,9 @@ down:
 phpunit:
 	docker container exec -it phpunit bash
 test:
-	vendor/bin/phpunit src/tests --testdox
+	vendor/bin/phpunit src/tests --color
+phpunit-install:
+	docker container exec -it phpunit composer require --dev phpunit/phpunit
+init:
+	@make up
+	@make phpunit-install
