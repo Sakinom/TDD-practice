@@ -1,14 +1,18 @@
 <?php
 
-abstract class Money {
-  protected $amount;
-  protected $currency;
-  abstract public function times(int $multiplier): Money;
+class Money {
+  protected int $amount;
+  protected string $currency;
 
-  public function money(int $amount, string $currency)
+  public function __construct(int $amount, string $currency)
   {
     $this->amount = $amount;
     $this->currency = $currency;
+  }
+
+  public function times(int $multiplier): Money
+  {
+    return new Money($this->amount * $multiplier, $this->currency);
   }
 
   public function currency(): string
@@ -19,17 +23,17 @@ abstract class Money {
   public function equals(object $object)
   {
     $money = $object;
-    return $this->amount === $money->amount && get_class($this) === get_class($money);
+    return $this->amount === $money->amount && $this->currency() === $money->currency();
   }
 
   public static function dollar(int $amount): Money
   {
-    return new Dollar($amount, 'USD');
+    return new Money($amount, 'USD');
   }
 
   public static function franc(int $amount): Money
   {
-    return new Franc($amount, 'CHF');
+    return new Money($amount, 'CHF');
   }
 }
 
@@ -37,23 +41,13 @@ class Dollar extends Money
 {
   public function __construct(int $amount, string $currency)
   {
-    parent::money($amount, $currency);
-  }
-
-  public function times(int $multiplier): Money
-  {
-    return Money::dollar($this->amount * $multiplier);
+    parent::__construct($amount, $currency);
   }
 }
 class Franc extends Money
 {
   public function __construct(int $amount, string $currency)
   {
-    parent::money($amount, $currency);
-  }
-
-  public function times(int $multiplier): Money
-  {
-    return Money::franc($this->amount * $multiplier);
+    parent::__construct($amount, $currency);
   }
 }
