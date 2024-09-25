@@ -43,4 +43,19 @@ class Money implements Expression
   {
     return new Sum($this, $addend);
   }
+
+  public function reduce(string $to): Money
+  {
+    return $this;
+  }
+
+  public function getAmount(): int
+  {
+    return $this->amount;
+  }
+
+  public function getCurrency(): string
+  {
+    return $this->currency;
+  }
 }
