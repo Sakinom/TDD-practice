@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/../../src/Money.php';
 require_once __DIR__ . '/../../src/Bank.php';
+require_once __DIR__ . '/../../src/Sum.php';
 
 class MoneyTest extends TestCase
 {
@@ -34,5 +35,22 @@ class MoneyTest extends TestCase
     $bank = new Bank();
     $reduced = $bank->reduce($sum, 'USD');
     $this->assertEquals(Money::dollar(10), $reduced);
+  }
+
+  public function testPlusReturnsSum()
+  {
+    $five = Money::dollar(5);
+    $result = $five->plus($five);
+    $sum = $result;
+    $this->assertEquals($five, $sum->augend);
+    $this->assertEquals($five, $sum->addend);
+  }
+
+  public function testReduceSum()
+  {
+    $sum = new Sum(Money::dollar(3), Money::dollar(4));
+    $bank = new Bank();
+    $result = $bank->reduce($sum, 'USD');
+    $this->assertEquals(Money::dollar(7), $result);
   }
 }
